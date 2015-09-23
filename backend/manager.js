@@ -4,7 +4,8 @@
 
 var router = require("koa-router"),
     bodyParser = require("koa-bodyparser"),
-    db = require("./db");
+    db = require("./db"),
+    ccap = require("ccap");
 
 var ManagerAPI = new router();
 
@@ -12,6 +13,14 @@ exports = module.exports = ManagerAPI;
 
 ManagerAPI
     .use(bodyParser())
+    .get("/manager/captcha", function * (next) {
+        var captcha = ccap();
+        var ary = captcha.get();
+        this.session.captcha = ary[0];
+        var buffer = ary[1];
+        console.log(this.session.captcha);
+        this.body = buffer;
+    })
     .post("/manager/login", function * (next) {
         userJSON = this.request.body;
         user = yield db.user.findOne({
@@ -32,8 +41,13 @@ ManagerAPI
         userJSON = this.request.body;
         if (userJSON.hasOwnProperty("uid") &&
             userJSON.hasOwnProperty("password") &&
+            userJSON.hasOwnProperty("captcha") &&
             typeof userJSON["uid"] === "string" &&
-            typeof userJSON["password"] == "string") {
+            typeof userJSON["password"] === "string" &&
+            typeof userJSON["captcha"] === "string" &&
+            typeof this.session.captcha === "string" &&
+            userJSON["captcha"] === this.session.captcha
+            ) {
             var user = yield db.user.findOne({"uid": userJSON["uid"]});
             if (user !== null) {
                 this.status = 406;
@@ -55,6 +69,7 @@ ManagerAPI
                 "reason": "bad form"
             }
         }
+        this.session.captcha = null;
     })
     .post("/manager/set_token", function * (next) {
         userJSON = this.request.body;

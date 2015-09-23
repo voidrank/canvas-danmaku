@@ -40,26 +40,7 @@ $((function() {
      *  "content": String
      * }
      */
-    var danmakuList = [
-        {
-            "content": "明天会更好",
-        },
-        {
-            "content": "明天会更好",
-        },
-        {
-            "content": "明天会更好",
-        },
-        {
-            "content": "明天会更好",
-        },
-        {
-            "content": "明天会更好",
-        },
-        {
-            "content": "明天会更好",
-        }
-    ];
+    var danmakuList = [];
     var danmakuOnScreen = [];
 
     function update(){
