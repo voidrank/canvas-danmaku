@@ -1,0 +1,90 @@
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0 0 0 0;
+    height: 100%;
+    width: 100%;
+}
+
+#iframe {
+    position: absolute;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+canvas {
+    pointer-events: none;
+    position: absolute;
+}
+
+#danmaku-wall {
+    z-index: 0;
+}
+
+#settingBar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -250px;
+    padding: 0 15px 0 15px;
+
+    height: 100%;
+    width: 200px;
+    background-color: #555555;
+
+    text-align: center;
+    opacity: 0.8;
+}
+
+#settingBar .element-wrapper {
+    margin: 20px 0 0 0;
+    padding: 5px 0 0 5px;
+    background-color: #ffffff;
+    width: 100%;
+    height: 35px;
+    border-radius: 8px;
+}
+
+#settingBar .title {
+    font-size: 2em;
+    font-weight: 900;
+    background-color: inherit;
+}
+
+#settingBar .submit-wrapper {
+    background-color: inherit;
+}
+
+#settingBar .submit-wrapper .submit {
+    height: 40px;
+    width: 200px;
+
+    font-size: 15px;
+    line-height: 30px;
+    font-weight: 700;
+    background-color: #ccffcc;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+#settingBar .submit-wrapper >input:hover {
+    color: #bbeebb;
+}
+
+
+#settingBar input {
+    outline: none;
+    border: none;
+    font-size: 15px;
+    height: 30px;
+}
+
+
