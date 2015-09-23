@@ -18,7 +18,7 @@ DisplayAPI
         if (lastTime === undefined ||
             time - lastTime > 600000 ||
             lastTime > time) {
-            lastTime = time;
+            this.session.lastTime = time;
             this.body = {"response": "adjust time"};
         }
         else {

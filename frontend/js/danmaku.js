@@ -105,7 +105,9 @@ $((function() {
         $.get(
             danmakuSettings["channelSrc"],
             function(e) {
-                console.log(e);
+                if (e.response !== "adjust time") {
+                    danmakuList = e.response;
+                }
             }
         )
     }, 1000);
