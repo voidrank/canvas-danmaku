@@ -5,7 +5,8 @@
 var router = require("koa-router"),
     bodyParser = require("koa-bodyparser"),
     db = require("./db"),
-    ccap = require("ccap");
+    ccap = require("ccap"),
+    crypto = require("crypto");
 
 var ManagerAPI = new router();
 
@@ -18,7 +19,6 @@ ManagerAPI
         var ary = captcha.get();
         this.session.captcha = ary[0];
         var buffer = ary[1];
-        console.log(this.session.captcha);
         this.body = buffer;
     })
     .post("/manager/login", function * (next) {
@@ -56,11 +56,14 @@ ManagerAPI
                 }
             }
             else {
+                var salt = crypto.randomBytes(128).toString("base64");
+                var password = crypto.createHash("sha512").update(userJSON["password"] + salt).digest("hex");
                 yield db.user.insert({
                     "uid": userJSON["uid"],
-                    "password": userJSON["password"]
+                    "password": password,
+                    "salt": salt
                 });
-                this.body = "successfully";
+                this.body = {"response":"success"};
             }
         }
         else {
@@ -73,7 +76,6 @@ ManagerAPI
     })
     .post("/manager/set_token", function * (next) {
         userJSON = this.request.body;
-        console.log(this.request.body);
         if (userJSON.hasOwnProperty("password") &&
             userJSON.hasOwnProperty("token") &&
             userJSON.hasOwnProperty("uid") &&
@@ -81,19 +83,38 @@ ManagerAPI
             typeof userJSON["token"] === "string" &&
             typeof userJSON["uid"] === "string") {
 
-            var user = yield db.user.findOne({"uid" : userJSON["uid"], "password": userJSON["password"]});
-            console.log(user);
-            if (user !== null) {
-                user["verification"] = false;
-                user["token"] = userJSON["token"];
-                yield db.user.update({"_id": user["_id"]}, user);
-                this.body = "successfully";
-            }
-            else {
+            var user = yield db.user.findOne({"uid" : userJSON["uid"]})
+            if (user === null || this.session.salt === null)
                 this.status = 403;
+            else {
+                var hashPassword = crypto.createHash("sha512").update(user["password"] + this.session.salt).digest('hex');
+                if (hashPassword !== userJSON["password"]) {
+                    this.status = 403;
+                }
+                else {
+                    user["verification"] = false;
+                    user["token"] = userJSON["token"];
+                    yield db.user.update({"_id": user["_id"]}, user);
+                    this.body = "successfully";
+                }
             }
         }
         else {
             this.status = 406;
+        }
+        this.session.salt = null;
+    })
+    .get("/manager/get_salt", function * (next) {
+        var randomSalt = crypto.randomBytes(128).toString("base64");
+        var user = yield db.user.findOne({"uid": this.query.uid[0]});
+        if (user === null) {
+            this.status = 406;
+        }
+        else {
+            this.session.salt = randomSalt;
+            this.body = {
+                "randomSalt": randomSalt,
+                "userSalt": user["salt"]
+            }
         }
     });

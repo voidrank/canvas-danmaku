@@ -67,9 +67,10 @@ WeChatAPI
             "channel" : channel,
             "content" : content,
             "timestamp" : timestamp
-        })
+        });
         this.body = "success";
     })
     .get("/wechat/:uid", function * (next) {
+        yield db.user.update({"uid": this.params.uid}, {"varidation": true});
         this.body = this.query.echostr[0];
     });

@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/jquery.min.js"></script>
-    <script src="js/register.js"></script>
+    <script src="js/register.js?version=0.0.2"></script>
 </head>
 
 <body>
@@ -28,7 +28,7 @@
                 <input id="login__password" type="password" class="form__input" placeholder="Password" required>
             </div>
 
-            <img src="/canvas_danmaku/api/manager/captcha" />
+            <img src="/canvas_danmaku/api/manager/captcha" id="captcha__image"/>
 
             <div class="form__field">
                 <label class="fontawesome-lock" for="login__captcha"><span class="hidden">Password</span></label>
@@ -41,7 +41,7 @@
 
         </form>
 
-        <p class="text--center">Not a member? <a href="../register.html">Sign up now</a> <span class="fontawesome-arrow-right"></span>
+        <p class="text--center">Have an account? <a href="../index.html">Sign in now</a> <span class="fontawesome-arrow-right"></span>
         </p>
 
     </div>
