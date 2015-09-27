@@ -6,33 +6,53 @@
 signal = {};
 
 // 鼠标进入指定区域， 弹出
-$(signal).on("pull", function () {
-
+$(signal).on("onSettings", function () {
+    setTimeout(function() {
+        $("#contact-form").css("display", "block");
+    }, 500);
+    $("#contact-form").css("transition", "opacity 0.5s ease").css("opacity", 1);
 });
 
 // 鼠标离开指定区域，弹回
-$(signal).on("push", function () {
-
+$(signal).on("outSettings", function () {
+    $("#contact-form").css("transition", "opacity 0.5s ease").css("opacity", 0);
+    setTimeout(function(){
+        $("#contact-form").css("display", "none");
+    }, 500);
 });
 
+// 请求更改settings
 $(signal).on("danmakuSettingsRequest", function(req) {
-
 });
 
+// 反向更改settings
 $(signal).on("danmakuSettingsResponse", function(res) {
 
 });
 
-$(function() {
-    $(document.body).mousemove(function (e) {
-        var width = document.documentElement.clientWidth;
-        if (e.pageX > width - 100) {
-            $(signal).trigger("pull");
-        }
-        else if (e.pageX < width - 300){
-            $(signal).trigger("push");
-        }
-    });
+// 触发切换iframe
+$(signal).on("toIframe", function(){
+    $("iframe").css("display", "block");
+});
+
+// 触发切换默认背景
+$(signal).on("toBackground", function() {
+    $("iframe").css("display", "none");
 });
 
 
+// other
+var onSettings = true;
+$(function() {
+    $("#setting-trigger").on("mousedown", function (e) {
+        if (onSettings === true) {
+            $(signal).trigger("outSettings");
+            onSettings = false;
+        }
+        else {
+            $(signal).trigger("onSettings");
+            onSettings = true;
+        }
+        e.preventDefault();
+    });
+});

@@ -2,9 +2,8 @@
  *
  * Created by lancy on 9/20/15.
  */
-$((function() {
+$(function() {
     var canvas = document.getElementById("danmaku-wall");
-    console.log(document.body);
 
     // windows settings
     var viewWidth = document.documentElement.clientWidth < 750 ? 750 : document.documentElement.clientWidth;
@@ -12,7 +11,7 @@ $((function() {
     canvas.width = viewWidth;
     canvas.height = viewHeight;
     canvas.style.width = viewWidth + "px";
-    canvas.style.height = viewHeight + "px";
+    canvas.style.height = viewHeight * 0.8 + "px";
 
     var ctx = document.getElementById("danmaku-wall").getContext("2d");
 
@@ -21,19 +20,9 @@ $((function() {
         "fontSize": 30,
         "speed": 3,
         "font": "serif",
-        "channelSrc": "http://stu.fudan.edu.cn/canvas_danmaku/api/channel/lancy"
+        "channelSrc": "/canvas_danmaku/api/channel/lancy",
+        "color": "#ffffff"
     };
-    $(signal).on("danmakuSettingsRequest", function(e, req){
-        if (!(req === null || req === undefined)) {
-            for (var i in req)
-                if (req.hasOwnProperty(i)) {
-                    danmakuSettings[i] = req[i];
-                }
-            if (req.hasOwnProperty("iframeSrc"))
-                $("#iframe").attr("src", req["iframeSrc"]);
-        }
-        $(signal).trigger("danmakuSettingsResponse", danmakuSettings);
-    });
     // danmaku list
     /*
      * {
@@ -70,19 +59,20 @@ $((function() {
         for (var i = 0; i < danmakuOnScreen.length; ++i) {
             danmaku = danmakuOnScreen[i];
             danmaku.x -= danmakuSettings['speed'];
-            ctx.font = danmakuSettings['fontSize'] + 'px ' + danmakuSettings['font']
+            ctx.font = danmakuSettings['fontSize'] + 'px ' + danmakuSettings['font'];
+            ctx.fontcolor = danmakuSettings["color"];
             ctx.fillText(danmaku.content, danmaku.x, danmaku.y);
         }
 
         window.requestAnimationFrame(update)
-    };
+    }
 
     window.requestAnimationFrame(update);
 
     // network
 
     setInterval(function(res) {
-        console.log(typeof danmakuSettings["channelSrc"])
+        console.log(typeof danmakuSettings["channelSrc"]);
         $.get(
             danmakuSettings["channelSrc"],
             function(e) {
@@ -92,5 +82,19 @@ $((function() {
             }
         )
     }, 1000);
-})
-);
+
+    setTimeout(function() {
+        $(signal).trigger("danmakuSettingsResponse", danmakuSettings);
+    }, 500);
+
+    $(signal).on("danmakuSettingsRequest", function(e, data) {
+        for (var i in data)
+            if (data.hasOwnProperty(i)) {
+                danmakuSettings[i] = data[i];
+            }
+        $("iframe").attr("src", danmakuSettings["iframeSrc"]);
+    });
+
+    //
+    $(signal).on("se")
+});

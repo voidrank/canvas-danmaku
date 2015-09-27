@@ -25,7 +25,8 @@ var SettingBar = React.createClass({
         return {
             "speed": 20,
             "fontSize": 20,
-            "iframeSrc" : ""
+            "iframeSrc": "",
+            "channelUrl": ""
         };
     },
     onIframeSrcChange: function(l) {
@@ -48,36 +49,58 @@ var SettingBar = React.createClass({
             "channelSrc": l.target.value
         })
     },
-    submit: function() {
-        $(signal).trigger("danmakuSettingsRequest", this.state);
+
+    onColorChange: function(l) {
+        this.setState({
+            "color": l.target.value
+        });
     },
+
+    submit: function(e) {
+        $(signal).trigger("danmakuSettingsRequest", this.state);
+        e.preventDefault();
+    },
+
+    toBackground: function(e) {
+        $(signal).trigger("toBackground");
+        e.preventDefault();
+    },
+
+    toIframe: function(e) {
+        $(signal).trigger("toIframe");
+        e.preventDefault();
+    },
+
     render: function() {
         var self = this;
         return(
-            <div id="settingBar">
-                <div className="element-wrapper title">SETTINGS</div>
-                <div className="element-wrapper">
-                    <input id="iframe-src" className="input" placeholder="iframe-src"
-                        value={self.state.iframeSrc} onChange={self.onIframeSrcChange} />
-                </div>
-                <div className="element-wrapper">
-                    <input id="channel-src" className="input" placeholder="channel-src"
-                           value={self.state.channelSrc} onChange={self.onChannelSrcChange} />
-                </div>
-                <div className="element-wrapper">
-                    <input id="font-size" className="input" placeholder="font-size"
-                        value={self.state.fontSize} onChange={self.onFontSizeChange} />
-                </div>
-                <div className="element-wrapper">
-                    <input id="speed" className="input" placeholder="speed"
-                        value={self.state.speed} onChange={self.onSpeedChange} />
-                </div>
-                <div className="element-wrapper submit-wrapper">
-                    <input type="submit" className="submit" onClick={self.submit} value="SUBMIT" />
+            <div>
+                <h1>Canvas Danmaku!</h1>
+                <div id='form_wrap'>
+                    <form id="contact-form">
+
+                        <p id="formstatus"></p>
+                        <label for="channel-url">CHANNEL URL: </label>
+                        <input type="text" name="channel-url" id="channel-url" onChange={self.onChannelSrcChange} value={self.state.channelSrc} />
+                        <label for="iframe-url">IFRAME URL: </label>
+                        <input type="text" name="iframe-url" id="iframe-url" onChange={self.onIframeSrcChange} value={self.state.iframeSrc} />
+                        <label for="font-size">FONT SIZE: </label>
+                        <input type="text" name="font-size" id="font-size" onChange={self.onFontSizeChange} value={self.state.fontSize} />
+                        <label for="danmaku-speed">DANMAKU SPEED: </label>
+                        <input type="text" name="danmaku-speed" id="danmaku-speed" onChange={self.onSpeedChange} value={self.state.speed} />
+                        <input type="text" name="danmaku-color" id="danmaku-color" onChange={self.onColorChange} value={self.state.color} />
+                        <input type="submit" readOnly name="submit" value="OK I want to change my settings, thanks!" onClick={self.submit} />
+
+                        <div style={{margin: "30px 0 0 0;"}}>
+                            <input type="submit" readOnly onClick={self.toBackground} value="Show background" name="show-background" style={{float:"left", width: "225px"}} />
+                            <input type="submit" readOnly onClick={self.toIframe} value="Show iframe" name="show-iframe" style={{float:"left", width: "175px"}} />
+
+                        </div>
+                    </form>
                 </div>
             </div>
         );
     }
 });
 
-React.render(<SettingBar />, document.getElementById("settingBarWrapper"));
+React.render(<SettingBar />, document.getElementById("react-wrap"));
