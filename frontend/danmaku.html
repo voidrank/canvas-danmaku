@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
+<head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Login</title>
+    <link rel="stylesheet" href="css/danmaku.css">
     <script src="./js/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/react/0.14.0-beta3/react.js"></script>
-    <script src="//cdn.bootcss.com/react/0.14.0-beta3/JSXTransformer.js"></script>
+    <script src="./js/index.js?version=0.0.2"></script>
     <script src="./js/signal.js"></script>
-    <script src="./js/danmaku.js"></script>
+    <script src="./js/react.js"></script>
+    <script src="./js/JSXTransformer.js"></script>
     <script src="./js/settingBar.jsx" type="text/jsx"></script>
-    <link href="css/index.css" rel="stylesheet">
+    <script src="./js/danmaku.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'YanoneKaffeesatzRegular';
+            src: url('./fonts/yanonekaffeesatz-regular-webfont.eot');
+            src: url('./fonts/yanonekaffeesatz-regular-webfont.eot?#iefix') format('embedded-opentype'),
+            url('./fonts/yanonekaffeesatz-regular-webfont.woff') format('woff'),
+            url('./fonts/yanonekaffeesatz-regular-webfont.ttf') format('truetype'),
+            url('./fonts/yanonekaffeesatz-regular-webfont.svg#YanoneKaffeesatzRegular') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+
 </head>
+
 <body>
-    <canvas id="danmaku-wall"> </canvas>
-    <iframe id="iframe" src="https://docs.google.com/presentation/embed?id=1-iy72LbpdJCodmCgkMgmuJasIb5Qi94gqwXyWlyO_gY"></iframe>
-    <div id="settingBarWrapper"></div>
+<button id="setting-trigger" ></button>
+<iframe src=""></iframe>
+<canvas id="danmaku-wall"></canvas>
+<div id="react-wrap">
+</div>
 </body>
 </html>
